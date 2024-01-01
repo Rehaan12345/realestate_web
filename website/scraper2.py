@@ -53,10 +53,12 @@ class BusinessList:
         """
         self.dataframe().to_csv(f"{filename}.csv", index=False)
 
+playwright = sync_playwright().start()
+browser = playwright.chromium.launch()
 
 def main(total, search_for):
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
+    # with sync_playwright() as p:
+        # browser = p.chromium.launch()
         page = browser.new_page()
 
         page.goto("https://www.google.com/maps", timeout=60000)
@@ -178,7 +180,7 @@ def run(category, location, search_amount):
     total = search_amount
     main(total=total, search_for=search_for) 
 
-# run(category="realestate", location="boston")
+# run(category="realestate", location="boston", search_amount=5)
 
 # if __name__ == "__main__":
 #     parser = argparse.ArgumentParser()
