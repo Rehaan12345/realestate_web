@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../static/styles.css">
+    <title>Web Scraper</title>
+</head>
+<body>
+    <h1>Web Scraper</h1>
+
+    <button><a href="/">Reload</a></button>
+
+    <div class="formcontainer">
+        <form method="POST" class="scrapeform">
+            <label for="category">Category</label>
+            <input type="text" name="category" required>
+            <label for="location">Location</label>
+            <input type="text" name="location" required>
+            <label for="searchamount">Search For</label>
+            <select name="searchamount" id="searchamount">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+            <input type="submit">
+        </form>
+    </div>
+
+    {% if tables %}
+
+    <table>
+        <br>
+        {% if category == "Category" %}"{% endif %}{{ category }}{% if category == "Category" %}"{% endif %} in {% if location == "Location" %}"{% endif %}{{ location }}{% if location == "Location" %}"{% endif %}
+        <br>
+        <form method="POST" class="download">
+            <input type="submit" class="downloadcsv" name="downloadcsv" value="Download CSV">
+            <input type="submit" class="downloadexcel" name="downloadexcel" value="Download Excel">
+        </form>
+        <h1>
+            {% for table in tables %}
+            <h2>
+                {{ titles[loop.index] }}
+                {{ table | safe }}
+            </h2>
+            {% endfor %}
+        </h1>
+    </table>
+
+    {% endif %}
+
+</body>
+</html>
