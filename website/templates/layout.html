@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../static/styles.css">
+    <script src="../static/index.js"></script>
     <title>Web Scraper</title>
 </head>
 <body>
@@ -24,9 +25,11 @@
                 <option value="50">50</option>
                 <option value="100">100</option>
             </select>
-            <input type="submit">
+            <input type="submit" id="submitbutton">
         </form>
     </div>
+
+    {% if failed %} <h2>Failed</h2> {% endif %}
 
     {% if tables %}
 

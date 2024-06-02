@@ -54,11 +54,12 @@ class BusinessList:
         self.dataframe().to_csv(f"{filename}.csv", index=False)
 
 playwright = sync_playwright().start()
-browser = playwright.chromium.launch()
+
 
 def main(total, search_for):
-    # with sync_playwright() as p:
-        # browser = p.chromium.launch()
+    # Error fixing: https://github.com/microsoft/playwright-python/issues/623
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(headless=True)
         page = browser.new_page()
 
         page.goto("https://www.google.com/maps", timeout=60000)
@@ -150,22 +151,27 @@ def main(total, search_for):
             else:
                 business.phone_number = ""
             if listing.locator(reviews_span_xpath).count() > 0:
-                business.reviews_average = float(
-                    listing.locator(reviews_span_xpath)
-                    .get_attribute("aria-label")
-                    .split()[0]
-                    .replace(",", ".")
-                    .strip()
-                )
-                business.reviews_count = int(
-                    listing.locator(reviews_span_xpath)
-                    .get_attribute("aria-label")
-                    .split()[2]
-                    .strip()
-                )
+                try:
+                    business.reviews_average = float(
+                        listing.locator(reviews_span_xpath).get_attribute("aria-label").split()[0].replace(",", ".").strip()
+                    )
+                    print(f'160 - {listing.locator(reviews_span_xpath).get_attribute("aria-label").split()[0].replace(",", ".").strip()}')
+                except:
+                    business.reviews_average = ""
+                try:
+                    business.reviews_count = int(
+                        listing.locator(reviews_span_xpath)
+                        .get_attribute("aria-label")
+                        .split()[2]
+                        .strip()
+                    )
+                except:
+                    business.reviews_count = ""
             else:
                 business.reviews_average = ""
                 business.reviews_count = ""
+
+            print(business)
 
             business_list.business_list.append(business)
 
